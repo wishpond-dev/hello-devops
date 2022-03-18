@@ -1,0 +1,19 @@
+version: "3.2"
+services:
+  web:
+    build: .
+    command: migrate
+    depends_on:
+      - postgres
+    ports:
+      - "8080:4567" #Just using another port
+    env_file:
+      - ./env-dev
+  postgres:
+    image: postgres:12.10
+    restart: always
+    env_file:
+      - ./env-dev
+
+
+# TODO - Add volumes to the database to persist the data

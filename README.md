@@ -17,3 +17,13 @@ Build a docker-compose file with the following services:
   `rake db:migrate && rake db:seed`
 
 NOTE: The ENV vars for the `hello-rb` container are on the file `env-dev`
+
+
+# SOLUTION TASK #1
+* Build the image running the command `docker build -t hello-rb .`
+* Run the container using the commnad `docker run -d -p 4567:4567 hello-rb`
+* test with curl `localhost:4567`
+
+# SOLUTION TASK #2
+* Run `docker-compose up -d`
+* test with curl `localhost:8080`
