@@ -1,0 +1,41 @@
+version: "3"
+services:
+  hello:
+    build: .
+    ports:
+      - 80:4567
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - migrations
+
+  postgres:
+    image: postgres:12.14
+    restart: always
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    env_file:
+      - .env
+
+  migrations:
+    entrypoint: "rake db:migrate && rake db:seed"
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    env_file:
+      - .env
