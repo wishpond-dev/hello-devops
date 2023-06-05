@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  hello:
+    image: hello-rb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:4567
+    env_file: env-dev
+
+  postgres:
+    image: postgres:12
+    env_file: env-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: bash -c "bundle exec rake db:migrate && bundle exec rake db:seed"
+    env_file: env-dev
+
+
